@@ -78,56 +78,98 @@ function App() {
 
         for (let y = 0; y < word.length; y++) {
             for (let i = 0; i < splitArr.length; i++) {
+                debugger
                 if (y === 0 && result.length === 0 && splitArr[i].includes(word[y])) {
                     result.push([i, splitArr[i].indexOf(word[y])]);
                     setCoordinatesOfLetters([...result]);
                     break;
                 }
-                if (y !== 0 && splitArr[i - 1] && splitArr[i - 1][result[result.length - 1][1]] === word[y]) {
-                    result.push([i - 1, result[counter][1]]);
-                    setCoordinatesOfLetters([...result]);
-                    counter++;
-                    break;
+
+                if (y !== 0) {
+                    i = result[counter][0]
                 }
+
+                if (y !== 0 && splitArr[i - 1] && splitArr[i - 1][result[result.length - 1][1]] === word[y]) {
+                    if (result.length <= 2) {
+                        result.push([i - 1, result[counter][1]]);
+                        setCoordinatesOfLetters([...result]);
+                        counter++;
+                        break;
+                    }
+                    if (result[result.length - 2][0] !== i - 1 || result[result.length - 2][1] !== result[counter][1]) {
+                        result.push([i - 1, result[counter][1]]);
+                        setCoordinatesOfLetters([...result]);
+                        counter++;
+                        break;
+                    }
+                }
+
                 if (
                     y !== 0
                     && splitArr[i][result[counter][1] - 1]
                     && splitArr[i][result[result.length - 1][1] - 1] === word[y]
-                )
-                {
-                    result.push([i, result[counter][1] - 1]);
-                    setCoordinatesOfLetters([...result]);
-                    counter++;
-                    break;
+                ) {
+                    if (result.length <= 2) {
+                        result.push([i, result[counter][1] - 1]);
+                        setCoordinatesOfLetters([...result]);
+                        counter++;
+                        break;
+                    }
+                    if (result[result.length - 2][0] !== i || result[result.length - 2][1] !== result[counter][1] - 1) {
+                        result.push([i, result[counter][1] - 1]);
+                        setCoordinatesOfLetters([...result]);
+                        counter++;
+                        break;
+                    }
                 }
+
                 if (
                     y !== 0
                     && splitArr[i][result[counter][1] + 1]
                     && splitArr[i][result[result.length - 1][1] + 1] === word[y]
-                )
-                {
-                    result.push([i, result[counter][1] + 1]);
-                    setCoordinatesOfLetters([...result]);
-                    counter++;
-                    break;
+                ) {
+                    if (result.length <= 2) {
+                        result.push([i, result[counter][1] + 1]);
+                        setCoordinatesOfLetters([...result]);
+                        counter++;
+                        break;
+                    }
+                    if (result[result.length - 2][0] !== i || result[result.length - 2][1] !== result[counter][1] + 1) {
+                        result.push([i, result[counter][1] + 1]);
+                        setCoordinatesOfLetters([...result]);
+                        counter++;
+                        break;
+                    }
                 }
+
                 if (y !== 0 && splitArr[i + 1] && splitArr[i + 1][result[result.length - 1][1]] === word[y]) {
-                    result.push([i + 1, result[counter][1]]);
-                    setCoordinatesOfLetters([...result]);
-                    counter++;
-                    break;
+                    if (result.length <= 2) {
+                        result.push([i + 1, result[counter][1]]);
+                        setCoordinatesOfLetters([...result]);
+                        counter++;
+                        break;
+                    }
+                    if (result[result.length - 2][0] !== i + 1 || result[result.length - 2][1] !== result[counter][1]) {
+                        result.push([i + 1, result[counter][1]]);
+                        setCoordinatesOfLetters([...result]);
+                        counter++;
+                        break;
+                    }
                 } else {
-                    setError(`Checking stopped ! Inside your test word is the symbol "${word[y]}" must be in close
+                    if (result.length !== 0) {
+                        setError(`Checking stopped ! Inside your test word is the symbol "${word[y]}" must be in close
                      proximity to the  preceding symbol "${word[y - 1]}" for example top, bottom, left or right !`);
-                    y = word.length + 1;
-                    i = splitArr.length + 1;
+                        y = word.length + 1;
+                        i = splitArr.length + 1;
+                    }
                 }
             }
         }
     };
 
     return (
-        <div className={style.container} style={{display: 'flex', flexDirection: 'column', margin: '100px auto', width: '60vw'}}>
+        <div className={style.container}
+             style={{display: 'flex', flexDirection: 'column', margin: '100px auto', width: '60vw'}}>
             <input
                 type="text"
                 placeholder={'Enter only english alphabetic characters n^2'}
